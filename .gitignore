@@ -17,7 +17,7 @@ dist/
 *.egg-info/
 __pycache__/
 .eggs/
-
+.idea/
 
 weights/
 results/
