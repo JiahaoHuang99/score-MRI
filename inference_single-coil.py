@@ -39,10 +39,17 @@ def main():
     img = img.view(1, 1, 320, 320)
     img = img.to(config.device)
 
-    mask = get_mask(img, img_size, batch_size,
-                    type=args.mask_type,
-                    acc_factor=args.acc_factor,
-                    center_fraction=args.center_fraction)
+    # mask = get_mask(img, img_size, batch_size,
+    #                 type=args.mask_type,
+    #                 acc_factor=args.acc_factor,
+    #                 center_fraction=args.center_fraction)
+
+    mask_1d = np.load('samples/random_af8_cf0.04_pe320.npy')
+    mask_1d = mask_1d[:, np.newaxis]
+    mask = np.repeat(mask_1d, 320, axis=1).transpose((1, 0)).astype(np.complex64)
+    mask = torch.from_numpy(mask)
+    mask = mask.view(1, 1, 320, 320)
+    mask = mask.to(config.device)
 
     ckpt_filename = f"./weights/checkpoint_95.pth"
     sde = VESDE(sigma_min=config.model.sigma_min, sigma_max=config.model.sigma_max, N=N)
@@ -93,6 +100,16 @@ def main():
     under_kspace = kspace * mask
     under_img = ifft2(under_kspace)
 
+    # # use cv2 to save mask
+    # import cv2
+    # mask = mask.squeeze().cpu().detach().numpy()
+    # mask_abs = np.abs(mask)
+    # mask_real = np.real(mask)
+    # mask_imag = np.imag(mask)
+    # cv2.imwrite('tmp/mask_abs.png', mask_abs * 255)
+    # cv2.imwrite('tmp/mask_real.png', mask_real * 255)
+    # cv2.imwrite('tmp/mask_imag.png', mask_imag * 255)
+
     print(f'Beginning inference')
     tic = time.time()
     x = pc_fouriercs(score_model, scaler(under_img), mask, Fy=under_kspace)
@@ -119,14 +136,14 @@ def main():
 
 def create_argparser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data', type=str, help='which data to use for reconstruction', required=True)
+    parser.add_argument('--data', type=str, help='which data to use for reconstruction', required=False, default='001')
     parser.add_argument('--mask_type', type=str, help='which mask to use for retrospective undersampling.'
                                                       '(NOTE) only used for retrospective model!', default='gaussian1d',
                         choices=['gaussian1d', 'uniform1d', 'gaussian2d'])
     parser.add_argument('--acc_factor', type=int, help='Acceleration factor for Fourier undersampling.'
-                                                       '(NOTE) only used for retrospective model!', default=4)
+                                                       '(NOTE) only used for retrospective model!', default=8)
     parser.add_argument('--center_fraction', type=float, help='Fraction of ACS region to keep.'
-                                                       '(NOTE) only used for retrospective model!', default=0.08)
+                                                       '(NOTE) only used for retrospective model!', default=0.04)
     parser.add_argument('--save_dir', default='./results')
     parser.add_argument('--N', type=int, help='Number of iterations for score-POCS sampling', default=2000)
     parser.add_argument('--m', type=int, help='Number of corrector step per single predictor step.'
@@ -135,4 +152,7 @@ def create_argparser():
 
 
 if __name__ == "__main__":
+
+    print(torch.cuda.is_available())
+
     main()

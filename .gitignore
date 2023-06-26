@@ -9,6 +9,7 @@
 *.log
 *~
 .coverage
+.DS_Store
 
 # Folders #
 ###########
