@@ -149,14 +149,14 @@ def main():
 
 def create_argparser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data', type=str, help='which data to use for reconstruction', required=True)
+    parser.add_argument('--data', type=str, help='which data to use for reconstruction', required=False, default='001')
     parser.add_argument('--mask_type', type=str, help='which mask to use for retrospective undersampling.'
                                                       '(NOTE) only used for retrospective model!', default='gaussian1d',
                         choices=['gaussian1d', 'uniform1d', 'gaussian2d'])
     parser.add_argument('--acc_factor', type=int, help='Acceleration factor for Fourier undersampling.'
-                                                       '(NOTE) only used for retrospective model!', default=4)
+                                                       '(NOTE) only used for retrospective model!', default=8)
     parser.add_argument('--center_fraction', type=float, help='Fraction of ACS region to keep.'
-                                                       '(NOTE) only used for retrospective model!', default=0.08)
+                                                       '(NOTE) only used for retrospective model!', default=0.04)
     parser.add_argument('--save_dir', default='./results')
     parser.add_argument('--N', type=int, help='Number of iterations for score-POCS sampling', default=500)
     parser.add_argument('--m', type=int, help='Number of corrector step per single predictor step.'
@@ -165,4 +165,7 @@ def create_argparser():
 
 
 if __name__ == "__main__":
+
+    print(torch.cuda.is_available())
+
     main()
