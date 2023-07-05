@@ -12,24 +12,22 @@ def define_Dataset(dataset_opt):
     # -----------------------------------------------------------
     # FastMRI
     # -----------------------------------------------------------
-    if dataset_type in ['fastmri.d.1.0.complex']:
-        raise NotImplementedError('Bug here, please use fastmri.d.1.1.complex')
-        from data.dataset_FastMRI_complex_d10 import DatasetFastMRI as D
 
-    elif dataset_type in ['fastmri.d.1.1.complex']:
-        from data.dataset_FastMRI_complex_d11 import DatasetFastMRI as D
-
-    elif dataset_type in ['fastmri.d.2.0.complex.mc']:
+    if dataset_type in ['fastmri.d.2.0.complex.mc']:
         from data.dataset_FastMRI_complex_mc_d20 import DatasetFastMRI as D
 
     elif dataset_type in ['fastmri.d.2.0.complex.sc']:
         from data.dataset_FastMRI_complex_sc_d20 import DatasetFastMRI as D
 
+    if dataset_type in ['fastmri.d.2.1.complex.mc']:
+        from data.dataset_FastMRI_complex_mc_d21 import DatasetFastMRI as D
+
+    elif dataset_type in ['fastmri.d.2.1.complex.sc']:
+        from data.dataset_FastMRI_complex_sc_d21 import DatasetFastMRI as D
+
     # -----------------------------------------------------------
     # SKM-TEA
     # -----------------------------------------------------------
-    elif dataset_type in ['skmtea.d.0.1.complex']:
-        from data.dataset_SKMTEA_complex import DatasetSKMTEA as D
 
 
 

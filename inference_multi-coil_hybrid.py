@@ -1,3 +1,6 @@
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
 from pathlib import Path
 from models import utils as mutils
 from sde_lib import VESDE
@@ -80,7 +83,7 @@ def main():
     ema.copy_to(score_model.parameters())
 
     # Specify save directory for saving generated samples
-    save_root = Path(f'./results/multi-coil/hybrid')
+    save_root = Path(f'./results/multi-coil/hybrid/debug-50')
     save_root.mkdir(parents=True, exist_ok=True)
 
     irl_types = ['input', 'recon', 'recon_progress', 'label']

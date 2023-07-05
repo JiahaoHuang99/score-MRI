@@ -101,11 +101,22 @@ def main(dataset_opt, start_slice):
     save_root = Path('./results/multi-coil/hybrid/{}'.format(task_name))
     save_root.mkdir(parents=True, exist_ok=True)
 
+    is_skip = True
     for idx, test_data in enumerate(test_loader):
 
-        if idx < start_slice:
-            print('Slice Idx: {}'.format(idx))
+        # load from break point
+        img_info = test_data['img_info'][0]
+        # start the loop when img_info == file1000052_009
+        # before that, skip the loop
+        # after that, keep the loop
+        if img_info == start_slice:
+            is_skip = False
+
+        if is_skip:
+            print('SKIP: Slice Idx: {}; Img Info: {}'.format(idx, img_info))
             continue
+        else:
+            print('PROCESS: Slice Idx: {}; Img Info: {}'.format(idx, img_info))
 
         ###############################################
         # 2. Inference
@@ -171,10 +182,6 @@ def main(dataset_opt, start_slice):
         x_abs_rss = root_sum_of_squares(x_abs, dim=1)
         x_abs_rss = x_abs_rss.squeeze().cpu().detach().numpy()
 
-        print('GT: Max {} Min {}'.format(np.max(H_RSS), np.min(H_RSS)))
-        print('ZF: Max {} Min {}'.format(np.max(L_RSS), np.min(L_RSS)))
-        print('Recon: Max {} Min {}'.format(np.max(x_abs_rss), np.min(x_abs_rss)))
-
         mkdir(os.path.join(save_root, 'png', 'GT'))
         mkdir(os.path.join(save_root, 'png', 'ZF'))
         mkdir(os.path.join(save_root, 'png', 'Recon'))
@@ -197,12 +204,12 @@ if __name__ == "__main__":
 
     print(torch.cuda.is_available())
 
-    start_slice = 0
+    start_slice = 'file1000071_011'
 
     dataset_opt = {
         "name": "test_dataset",
-        "dataset_name": "fastmri.d.2.0.complex.mc_val_mini",
-        "dataset_type": "fastmri.d.2.0.complex.mc",
+        "dataset_name": "fastmri.d.2.1.complex.mc_val_mini",
+        "dataset_type": "fastmri.d.2.1.complex.mc",
         "dataroot_H": "/media/ssd/data_temp/fastMRI/knee/d.2.0.complex.mc/val_mini/PD",
         "mask": "fMRI_Ran_AF8_CF0.04_PE320",
         "H_size": 320,
