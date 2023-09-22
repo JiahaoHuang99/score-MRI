@@ -178,9 +178,9 @@ if __name__ == "__main__":
 
     dataset_opt = {
         "name": "test_dataset",
-        "dataset_name": "fastmri.d.2.1.complex.sc_val_mini",
+        "dataset_name": "fastmri.d.2.1.complex.sc_val",
         "dataset_type": "fastmri.d.2.1.complex.sc",
-        "dataroot_H": "/media/ssd/data_temp/fastMRI/knee/d.2.0.complex.sc/val_mini/PD",
+        "dataroot_H": "/media/ssd/data_temp/fastMRI/knee/d.2.0.complex.sc/val/PD",
         "mask": "fMRI_Ran_AF8_CF0.04_PE320",
         "H_size": 320,
         "complex_type": "1ch",

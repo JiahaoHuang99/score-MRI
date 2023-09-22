@@ -123,14 +123,14 @@ def main():
     label = img.squeeze().cpu().detach().numpy()
     mask_sv = mask.squeeze().cpu().detach().numpy()
 
-    np.save(str(save_root / 'input' / fname) + '.npy', input)
+    # np.save(str(save_root / 'input' / fname) + '.npy', input)
     np.save(str(save_root / 'input' / (fname + '_mask')) + '.npy', mask_sv)
-    np.save(str(save_root / 'label' / fname) + '.npy', label)
+    # np.save(str(save_root / 'label' / fname) + '.npy', label)
     plt.imsave(str(save_root / 'input' / fname) + '.png', np.abs(input), cmap='gray')
     plt.imsave(str(save_root / 'label' / fname) + '.png', np.abs(label), cmap='gray')
 
     recon = x.squeeze().cpu().detach().numpy()
-    np.save(str(save_root / 'recon' / fname) + '.npy', recon)
+    # np.save(str(save_root / 'recon' / fname) + '.npy', recon)
     plt.imsave(str(save_root / 'recon' / fname) + '.png', np.abs(recon), cmap='gray')
 
 
@@ -145,7 +145,7 @@ def create_argparser():
     parser.add_argument('--center_fraction', type=float, help='Fraction of ACS region to keep.'
                                                        '(NOTE) only used for retrospective model!', default=0.04)
     parser.add_argument('--save_dir', default='./results')
-    parser.add_argument('--N', type=int, help='Number of iterations for score-POCS sampling', default=2000)
+    parser.add_argument('--N', type=int, help='Number of iterations for score-POCS sampling', default=1000)
     parser.add_argument('--m', type=int, help='Number of corrector step per single predictor step.'
                                               'It is advised not to change this default value.', default=1)
     return parser
